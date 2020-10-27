@@ -47,9 +47,47 @@ package com.zain.lessons;
  */
 
 //思路:
-// 1.将两个数组归并排序
-// 2.分奇偶情况 取中值
+// 简单解法1.将两个数组归并排序,分奇偶情况 取中值
+// 解法2.(优化),不用归并,只要遍历比较取到中间位置即可
+class Solution2 {
+    public int[] find2NumByOverIndex(int[] num1, int[] num2, int overIndex){
 
+        int preNum = -1;
+        int curNum = -1;
+
+        int index1 = 0;
+        int index2 = 0;
+
+        for (int i = 0; i <= overIndex; i++) {
+            boolean useNum1 = false;
+            if((index1 < num1.length) && (index2 >= num2.length || num1[index1] < num2[index2])){//index1
+                preNum = curNum;
+                curNum = num1[index1];
+                index1++;
+            }else{
+                preNum = curNum;
+                curNum = num2[index2];
+                index2++;
+            }
+        }
+        return new int[]{preNum, curNum};
+    }
+
+
+
+    public  double findMedianSortedArrays(int[] num1, int[] num2){
+        if(num1.length == 0 && num2.length == 0){
+            return 0.0d;
+        }
+        int len = num1.length + num2.length;
+        int []result = find2NumByOverIndex(num1,num2, len/2);
+        if(len % 2 == 0){
+            return (result[0] + result[1])/2.0;
+        }else{
+            return result[1];
+        }
+    }
+}
 public class Lesson4 {
     public int[] mergeArrays(int[] nums1, int[] nums2){
         int[] result = new int[nums1.length + nums2.length];
@@ -100,6 +138,7 @@ public class Lesson4 {
 
     public static void main(String[] args) {
         System.out.println(new Lesson4().findMedianSortedArrays(new int[]{}, new int[]{1}));
+        System.out.println(new Solution2().findMedianSortedArrays(new int[]{}, new int[]{1}));
 
         //StringBuffer
     }
